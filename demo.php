@@ -5,7 +5,7 @@ $username = "root";
 $password = "";
 $dbname = "demotest1";
 
-// Create connection
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 // Check connection
 if ($conn->connect_error) {
@@ -101,6 +101,22 @@ body{
     border: none;
     cursor: pointer;
 }
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+
+}
+
+tr:nth-child(even) {
+    background-color: white;
+}
 </style>
 
 </head>
@@ -109,7 +125,7 @@ body{
                 <img src="https://image.ibb.co/kUagtU/rocket_contact.png" alt="rocket_contact"/>
             </div>
             <form method="post" action="">
-                <h3>Drop Us a Message</h3>
+                <h3>Enquiry Form</h3>
                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -137,3 +153,51 @@ body{
                 </div>
             </form>
 </div>
+<?php
+/* Attempt MySQL server connection. Assuming you are running MySQL
+server with default setting (user 'root' with no password) */
+$link = mysqli_connect("localhost", "root", "", "demotest1");
+ 
+// Check connection
+if($link === false){
+    die("ERROR: Could not connect. " . mysqli_connect_error());
+}
+ 
+// Attempt select query execution
+$sql = "SELECT * FROM enquiry";
+if($result = mysqli_query($link, $sql)){
+    if(mysqli_num_rows($result) > 0){
+		 echo "<h1 style='text-align:center;'>Enquiry Form Data</h1>";
+        echo "<table>";
+            echo "<tr>";
+                echo "<th>FirstName</th>";
+                echo "<th>LastName</th>";
+                echo "<th>Email</th>";
+                echo "<th>Date</th>";
+				 echo "<th>Comments</th>";
+            echo "</tr>";
+        while($row = mysqli_fetch_array($result)){
+            echo "<tr>";
+                echo "<td>" . $row['firstname'] . "</td>";
+                echo "<td>" . $row['lastname'] . "</td>";
+                echo "<td>" . $row['email'] . "</td>";
+                echo "<td>" . $row['date'] . "</td>";
+				 echo "<td>" . $row['comment'] . "</td>";
+            echo "</tr>";
+        }
+        echo "</table>";
+        // Free result set
+        mysqli_free_result($result);
+    } else{
+        echo "No records matching your query were found.";
+    }
+} else{
+    echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
+}
+ 
+// Close connection
+mysqli_close($link);
+?>
+
+ </body>
+</html>
